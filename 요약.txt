@@ -1,0 +1,139 @@
+<Top></Top>
+<Sidebar></Sidebar>
+이런식으로 복잡한 코드를 태그화해서 만듦. 이를 component라고 한다.
+1.가독성
+2.재사용성 
+Top을 한번 정의하면 다른 html에서도 사용가능.
+3.유지보수성
+Top에 버그가 있을때 이걸 수정하면 전부다 바뀌어짐.
+
+코딩 -> 실행 -> deploy
+
+npm : 프로그램을 설치하는 프로그램
+npx : create-react-app을 임시로 설치해서 다시 지우는애. 
+공간낭비방지, 항상 최신버전을 사용할 수 있도록 유도.
+
+폴더생성후, 그 폴더를 create-react-app .  명령어를 통해
+환경세팅한다.
+
+npm run start로 실행한다.
+
+public : 인덱스.html이 잇는곳
+<div id="root"></div> 이부분이 중요하다. 컴포넌트들은 여기에 들어가야
+한다. id가 root인곳에 들어가야한다.
+
+이는 scr디렉토리안에 들어있는 것들로 만들어진다. 
+index.js 
+ReactDOM.render(
+  <React.StrictMode>
+    <App /> : 리엑트를 통해 만든 정의태그. 컴포넌트.
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+ 이 중요. ID값이 root인 태그를 선택
+컴포넌트 실제구현은 import App from './App'; 를 통해한다.
+./App는 사실 ./App.js 이다. 
+class App extends Component {
+  render(){
+    return(
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+}
+
+이걸
+class App extends Component {
+  render(){
+    return(
+    <div className="App">
+      Hello,React!!
+    </div>
+  );
+}
+}
+처럼 바꾸면, 자동으로 Hello,React!!!로 홈페이지가 리로드된다. start안해도.
+
+반드시 리엑트는 하나의 태그 안쪽에 나머지 태그들이 있어야한다.
+
+create react app은 무겁다. npm run start 은 로컬. 이는 개발자용
+1.7mb나 된다.
+npm run build 을 하면 production용. build폴더가 생성됨. 여기에 있는
+파일들은 공백들 제거 등등. 용량줄여줌. 실제 서비스할땐 build안에 있는
+파일들을 쓰면 된다.
+
+npm install -g serve : serve라는 명령어로 웹서버설치
+npx serve -s build : 한번만 서버실행. 우리의 build를 실행하겠다.
+build로 실행하면 144kb밖에안됨.
+
+props : 속성
+이를 활용하여 리팩토링을 한다.
+
+하나의 파일안에 천개의 컴포넌트있으면 복잡하다.
+각각의 컴포넌트별로 정리정돈해야한다.
+
+state는 props와 같이 챙겨야한다.
+props와 내부적인 구현인 state는 분리되어야한다.
+제품을 쓰는데 전선이 나와있으면 안되는 것 처럼.
+양쪽에 편의성을 각자 도모해야한다.
+component를 구현할때 보다 다양한 일을 하기 위해
+state를 구현한다.
+
+props나 state가 바뀌면 화면이 다시 그려진다.
+
+이벤트가 발생했을 때 기본적인 동작을 막는게 e.preventDefault()
+
+props 는 read only, 수정 불가능
+state는 수정가능. this.setState로.
+리덕스는 데이터들을 하나의 공간에 모아놓음. 이 저장소를 수정하면
+여기에 저장된 데이터들이 다 수정됨.
+
+textarea : 쓸게 여러줄
+placeholder : 텍스트박스 안의 기본값
+
+배열.push 하면 배열추가됨
+var arr2=[1,2];
+result=arr2.concat(3); 을 하면 마찬가지로 추가됨.
+push는 원본을 바꾼다. concat은 원본을 바꾸지 않는다.
+새로운 배열을 만든다. 이 방법이 더 좋다. 성능개선이 좋다.
+arr2.concat(3) 을 해도 여전히 arr2는 [1,2]이다.
+원본을 수정하는게 아니라 변경된 사항으로 수정하는게 좋다.
+
+APP을 실행할때마다 create 컴포넌트를 눌러도 toc컴포넌트가
+렌더링된다. 이건 불필요한작업이다. 이를 막기 위해 
+shouldComponentUpdate(newProps,newState)가 있다.
+이 함수를 false로 리턴하면, 렌더는 실행안된다.
+newProps.data 로 새로 바뀐 값과 this.props.data 이전값을
+알 수 있다. data가 바뀌면 렌더호출, 바뀌지 않으면 호출x
+식으로 코딩하면 좋다. 
+즉, push를 하면 원본을 바꾸기 때문에, newProps.data와
+this.props.data의 값이 똑같게 로그가 찍힌다. 
+
+var a=[1,2]
+var b=Array.from(a)
+a와 b의 값은 같지만 a===b -> false 이다.
+이렇게하고 b.push를 하면 concat과 같은 효과.
+
+var a={name:'egoing'}
+var b = Object.assign({},a);
+a===b -> false
+b.name='hottj'
+b는 hottj 출력.
+
+immuatble.js 라이브러리 쓰면 모든 함수가 원본 바뀌지않음.
+
+
